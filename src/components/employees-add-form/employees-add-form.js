@@ -48,7 +48,7 @@ class EmployeesAddForm extends Component {
             required 
           />
           <input 
-            type="text" 
+            type="number" 
             name="salary"
             className="form-control new-post-label"
             placeholder="З/П в $?" 
