@@ -38,15 +38,9 @@ class App extends Component {
         },
       ],
       term: '',
-      filter: 'All'
+      filter: 'All',
     };
   }
-
-  // deleteItem = (id) => {
-  //   const { data } = this.state;
-  //   const filteredData = data.filter((item) => item.id !== id);
-  //   this.setState({ data: filteredData });
-  // };
 
   deleteItem = (id) => {
     this.setState(({ data }) => ({
@@ -86,6 +80,17 @@ class App extends Component {
     this.setState({ term });
   };
 
+  onChangeSalary = (id, salary) => {
+    const { data } = this.state;
+    const newDate = data.map((item) => {
+      if (item.id === id) {
+        return { ...item, salary };
+      }
+      return item;
+    });
+    this.setState({ data: newDate });
+  };
+
   filterPost = (items, filter) => {
     switch (filter) {
       case 'All':
@@ -95,7 +100,7 @@ class App extends Component {
       case 'More1000$':
         return items.filter((item) => item.salary > 1000);
       default:
-        throw new Error(`Unexpected filter: ${filter}`)
+        throw new Error(`Unexpected filter: ${filter}`);
     }
   };
 
@@ -106,16 +111,18 @@ class App extends Component {
   render() {
     const { data, term, filter } = this.state;
     const countAllEmployees = data.length;
-    const countIncreaseEmployees = data.filter((item) => item.isIncrease).length;
+    const countIncreaseEmployees = data.filter(
+      (item) => item.isIncrease
+    ).length;
 
     const visibleData = this.searchEmployee(data, term);
     const filteredData = this.filterPost(visibleData, filter);
 
     return (
       <div className='app'>
-        <AppInfo 
+        <AppInfo
           countAllEmployees={countAllEmployees}
-          countIncreaseEmployees={countIncreaseEmployees} 
+          countIncreaseEmployees={countIncreaseEmployees}
         />
         <div className='search-panel'>
           <SearchPanel onUpdateSearch={this.onUpdateSearch} />
@@ -126,6 +133,7 @@ class App extends Component {
           data={filteredData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
+          onChangeSalary={this.onChangeSalary}
         />
         <EmployeesAddForm onAddEmployees={this.addEmployees} />
       </div>
