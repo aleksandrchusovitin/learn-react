@@ -46,6 +46,7 @@ class EmployeesAddForm extends Component {
             onChange={this.onChangeValue}
             value={name}
             required 
+            minLength="3"
           />
           <input 
             type="number" 

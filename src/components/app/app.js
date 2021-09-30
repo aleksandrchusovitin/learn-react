@@ -37,6 +37,8 @@ class App extends Component {
           id: _.uniqueId(),
         },
       ],
+      term: '',
+      filter: 'All'
     };
   }
 
@@ -72,10 +74,42 @@ class App extends Component {
     }));
   };
 
+  searchEmployee = (items, term) => {
+    if (term === '') {
+      return items;
+    }
+
+    return items.filter((item) => item.name.indexOf(term) !== -1);
+  };
+
+  onUpdateSearch = (term) => {
+    this.setState({ term });
+  };
+
+  onFilter = (items, filter) => {
+    switch (filter) {
+      case 'All':
+        return items;
+      case 'ToIncrease':
+        return items.filter((item) => item.isIncrease);
+      case 'More1000$':
+        return items.filter((item) => item.salary > 1000);
+      default:
+        throw new Error(`Unexpected filter: ${filter}`)
+    }
+  };
+
+  onUpdateFilter = (filter) => {
+    this.setState({ filter });
+  };
+
   render() {
-    const { data } = this.state;
+    const { data, term, filter } = this.state;
     const countAllEmployees = data.length;
     const countIncreaseEmployees = data.filter((item) => item.isIncrease).length;
+
+    const visibleData = this.searchEmployee(data, term);
+    const filteredData = this.onFilter(visibleData, filter);
 
     return (
       <div className='app'>
@@ -84,12 +118,12 @@ class App extends Component {
           countIncreaseEmployees={countIncreaseEmployees} 
         />
         <div className='search-panel'>
-          <SearchPanel />
-          <AppFilter />
+          <SearchPanel onUpdateSearch={this.onUpdateSearch} />
+          <AppFilter onUpdateFilter={this.onUpdateFilter} />
         </div>
 
         <EmployeesList
-          data={data}
+          data={filteredData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
         />
