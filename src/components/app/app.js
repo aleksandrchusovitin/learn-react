@@ -86,12 +86,12 @@ class App extends Component {
     this.setState({ term });
   };
 
-  onFilter = (items, filter) => {
+  filterPost = (items, filter) => {
     switch (filter) {
       case 'All':
         return items;
-      case 'ToIncrease':
-        return items.filter((item) => item.isIncrease);
+      case 'ToRise':
+        return items.filter((item) => item.isRise);
       case 'More1000$':
         return items.filter((item) => item.salary > 1000);
       default:
@@ -99,7 +99,7 @@ class App extends Component {
     }
   };
 
-  onUpdateFilter = (filter) => {
+  onFilterSelect = (filter) => {
     this.setState({ filter });
   };
 
@@ -109,7 +109,7 @@ class App extends Component {
     const countIncreaseEmployees = data.filter((item) => item.isIncrease).length;
 
     const visibleData = this.searchEmployee(data, term);
-    const filteredData = this.onFilter(visibleData, filter);
+    const filteredData = this.filterPost(visibleData, filter);
 
     return (
       <div className='app'>
@@ -119,7 +119,7 @@ class App extends Component {
         />
         <div className='search-panel'>
           <SearchPanel onUpdateSearch={this.onUpdateSearch} />
-          <AppFilter onUpdateFilter={this.onUpdateFilter} />
+          <AppFilter onFilterSelect={this.onFilterSelect} filter={filter} />
         </div>
 
         <EmployeesList

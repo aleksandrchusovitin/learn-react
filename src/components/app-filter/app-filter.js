@@ -1,51 +1,39 @@
-import { Component } from 'react';
+import cn from 'classnames';
 
 import './app-filter.css';
 
-class AppFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { filter: 'All' };
-  }
+const AppFilter = ({ onFilterSelect, filter }) => {
+  const buttonsData = [
+    { name: 'All', label: 'Все сотрудники' },
+    { name: 'ToRise', label: 'На повышение' },
+    { name: 'More1000$', label: 'З/П больше 1000$' },
+  ];
 
-  handlerFilter = ({ target }) => {
-    const filter = target.getAttribute('data-filter');
-    this.setState({ filter });
+  const buttons = buttonsData.map(({ name, label }) => {
+    const isActiveBtn = (filter === name);
+    const classes = cn({
+      btn: true,
+      'btn-outline-light': !isActiveBtn,
+      'btn-light': isActiveBtn,
+    });
 
-    const { onUpdateFilter } = this.props;
-    onUpdateFilter(filter);
-  };
-
-  render() {
     return (
-      <div className='btn-group'>
-        <button 
-          className='btn btn-light'
-          type='button' 
-          data-filter='All'
-          onClick={this.handlerFilter}
-        >
-          Все сотрудники
-        </button>
-        <button
-          className='btn btn-outline-light'
-          type='button'
-          data-filter='ToIncrease'
-          onClick={this.handlerFilter}
-        >
-          На повышение
-        </button>
-        <button
-          className='btn btn-outline-light'
-          type='button'
-          data-filter='More1000$'
-          onClick={this.handlerFilter}
-        >
-          З/А больше 1000$
-        </button>
-      </div>
+      <button
+        key={name}
+        className={classes}
+        type='button'
+        onClick={() => onFilterSelect(name)}
+      >
+        {label}
+      </button>
     );
-  }
-}
+  });
+
+  return (
+    <div className='btn-group'>
+      {buttons}
+    </div>
+  );
+};
 
 export default AppFilter;
