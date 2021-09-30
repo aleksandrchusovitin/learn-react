@@ -35,6 +35,7 @@ class EmployeesListItem extends Component {
           className='list-group-item-label'
           onClick={onToggleProp}
           data-toggle='isRise'
+          // tabIndex="0"
         >
           {name}
         </span>
